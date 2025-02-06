@@ -1,7 +1,8 @@
 import { Menu, Globe, ChevronDown, Key } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -11,6 +12,29 @@ interface SidebarProps {
 
 const Sidebar = ({ isOpen, onToggle, onApiKeyChange }: SidebarProps) => {
   const [apiKey, setApiKey] = useState("");
+  const { toast } = useToast();
+  
+  // Load API key from localStorage on component mount
+  useEffect(() => {
+    const savedApiKey = localStorage.getItem("apiKey");
+    if (savedApiKey) {
+      setApiKey(savedApiKey);
+      onApiKeyChange(savedApiKey);
+    }
+  }, [onApiKeyChange]);
+
+  const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newApiKey = e.target.value;
+    setApiKey(newApiKey);
+    onApiKeyChange(newApiKey);
+    localStorage.setItem("apiKey", newApiKey);
+    
+    toast({
+      title: "API Key Saved",
+      description: "Your API key has been saved and will persist between sessions",
+    });
+  };
+
   const timeframes = [
     { title: "Yesterday", items: ["Using Tailwind CSS Guide"] },
     { 
@@ -33,12 +57,6 @@ const Sidebar = ({ isOpen, onToggle, onApiKeyChange }: SidebarProps) => {
       ]
     }
   ];
-
-  const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newApiKey = e.target.value;
-    setApiKey(newApiKey);
-    onApiKeyChange(newApiKey);
-  };
 
   return (
     <div className={cn(
