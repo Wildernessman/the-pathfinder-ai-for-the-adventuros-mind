@@ -14,7 +14,6 @@ const Sidebar = ({ isOpen, onToggle, onApiKeyChange }: SidebarProps) => {
   const [apiKey, setApiKey] = useState("");
   const { toast } = useToast();
   
-  // Load API key from localStorage on component mount
   useEffect(() => {
     const savedApiKey = localStorage.getItem("apiKey");
     if (savedApiKey) {
@@ -34,29 +33,6 @@ const Sidebar = ({ isOpen, onToggle, onApiKeyChange }: SidebarProps) => {
       description: "Your API key has been saved and will persist between sessions",
     });
   };
-
-  const timeframes = [
-    { title: "Yesterday", items: ["Using Tailwind CSS Guide"] },
-    { 
-      title: "Previous 7 Days", 
-      items: [
-        "Likeable and Inception Levels",
-        "Viral Figma Board Ideas",
-        "RAG Status in Software Dev",
-        "Image Input ChatGPT API"
-      ] 
-    },
-    {
-      title: "Previous 30 Days",
-      items: [
-        "Focus on Lovable Viral",
-        "Create Twitter Clone",
-        "Reddit Posting Guidelines",
-        "Revamping Social Features",
-        "US AI Voting Logo"
-      ]
-    }
-  ];
 
   return (
     <div className={cn(
@@ -106,19 +82,6 @@ const Sidebar = ({ isOpen, onToggle, onApiKeyChange }: SidebarProps) => {
                 </div>
                 <span className="text-sm">Explore GPTs</span>
               </div>
-            </div>
-
-            <div className="mt-4 flex flex-col gap-4">
-              {timeframes.map((timeframe) => (
-                <div key={timeframe.title}>
-                  <div className="px-3 py-2 text-xs text-gray-500">{timeframe.title}</div>
-                  {timeframe.items.map((item) => (
-                    <div key={item} className="group flex h-10 items-center gap-2.5 rounded-lg px-2 hover:bg-token-sidebar-surface-secondary cursor-pointer">
-                      <span className="text-sm">{item}</span>
-                    </div>
-                  ))}
-                </div>
-              ))}
             </div>
           </div>
         </div>
