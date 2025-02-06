@@ -4,6 +4,11 @@
 
 body {
   @apply bg-chatgpt-main text-white;
+  background-image: url('/lovable-uploads/8106c028-75cb-488d-a5f0-d88018d3507e.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 .sidebar-item {
@@ -12,4 +17,15 @@ body {
 
 .action-button {
   @apply flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-chatgpt-hover/50 border border-transparent hover:border-chatgpt-border transition-all duration-200;
+}
+
+/* Add a semi-transparent overlay to improve text readability */
+main {
+  @apply relative;
+}
+
+main::before {
+  content: '';
+  @apply fixed inset-0 bg-black/50 pointer-events-none;
+  z-index: -1;
 }
