@@ -45,7 +45,7 @@ const Index = () => {
 
       const assistantMessage: Message = {
         role: 'assistant',
-        content: `This is a placeholder response. To use ${selectedModel}, please add your API key in the sidebar.`
+        content: `This is a placeholder response. To use ${selectedModel}, please add your API key in The Map Room.`
       };
 
       setMessages([...newMessages, assistantMessage]);
@@ -75,7 +75,7 @@ const Index = () => {
           {messages.length === 0 ? (
             <div className="w-full max-w-3xl px-4 space-y-4">
               <div className="space-y-4">
-                <h1 className="mb-8 text-4xl font-semibold text-center">What can I help with?</h1>
+                <h1 className="mb-8 text-4xl font-semibold text-center">Welcome to The Pathfinder</h1>
                 <div className="flex justify-center mb-4">
                   <ModelSelector 
                     selectedModel={selectedModel}
@@ -99,7 +99,7 @@ const Index = () => {
                 <ChatInput onSend={handleSendMessage} isLoading={isLoading} />
               </div>
               <div className="text-xs text-center text-gray-500 py-2">
-                ChatGPT can make mistakes. Check important info.
+                The Pathfinder can make mistakes. Please verify important information.
               </div>
             </>
           )}
