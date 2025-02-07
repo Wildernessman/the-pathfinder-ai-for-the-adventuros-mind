@@ -23,14 +23,29 @@ const Index = () => {
 
   // Load messages from localStorage when component mounts
   useEffect(() => {
-    const savedMessages = localStorage.getItem('chatMessages');
-    if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
+    try {
+      const savedMessages = localStorage.getItem('chatMessages');
+      if (savedMessages) {
+        const parsedMessages = JSON.parse(savedMessages);
+        // Validate the parsed messages
+        if (Array.isArray(parsedMessages) && parsedMessages.every(msg => 
+          msg && 
+          typeof msg === 'object' && 
+          (msg.role === 'user' || msg.role === 'assistant') && 
+          typeof msg.content === 'string'
+        )) {
+          setMessages(parsedMessages);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading messages:', error);
+      // Clear potentially corrupted data
+      localStorage.removeItem('chatMessages');
     }
   }, []);
 
   const handleSendMessage = async (content: string) => {
-    if (!content.trim()) {
+    if (!content?.trim()) {
       toast({
         title: "Error",
         description: "Please enter a message",
@@ -42,12 +57,14 @@ const Index = () => {
     setIsLoading(true);
 
     try {
-      const newMessages = [
-        ...messages,
-        { role: 'user', content } as const
-      ];
-      
+      const newMessage: Message = {
+        role: 'user',
+        content: content.trim()
+      };
+
+      const newMessages = [...messages, newMessage];
       setMessages(newMessages);
+      
       // Save to localStorage after adding user message
       localStorage.setItem('chatMessages', JSON.stringify(newMessages));
 
@@ -56,17 +73,18 @@ const Index = () => {
 
       const assistantMessage: Message = {
         role: 'assistant',
-        content: `This is a placeholder response. To use ${selectedModel}, please add your API key in The Map Room.`
+        content: `This is a placeholder response. To use ${selectedModel || 'OpenAI'}, please add your API key in The Map Room.`
       };
 
       const updatedMessages = [...newMessages, assistantMessage];
       setMessages(updatedMessages);
       // Save to localStorage after adding assistant response
       localStorage.setItem('chatMessages', JSON.stringify(updatedMessages));
-    } catch (error: any) {
+    } catch (error) {
+      console.error('Error sending message:', error);
       toast({
         title: "Error",
-        description: error.message,
+        description: error instanceof Error ? error.message : "An error occurred",
         variant: "destructive"
       });
     } finally {
