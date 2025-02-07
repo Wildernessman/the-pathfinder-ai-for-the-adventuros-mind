@@ -1,4 +1,3 @@
-
 import { Check, Loader2, X } from "lucide-react";
 
 type Project = {
@@ -37,17 +36,9 @@ const ProjectSidebar = ({ isOpen }: ProjectSidebarProps) => {
       }`}
     >
       <div className="p-4">
-        <h2 className="text-lg font-semibold mb-4">Projects</h2>
+        <h2 className="text-lg font-semibold mb-4">Look Out Point: "Nature's Algorithm"</h2>
         <div className="space-y-3">
-          {projects.map((project) => (
-            <div
-              key={project.id}
-              className="flex items-center justify-between p-3 rounded-lg bg-chatgpt-hover/50 hover:bg-chatgpt-hover transition-colors duration-200"
-            >
-              <span className="text-sm">{project.name}</span>
-              {getStatusIcon(project.status)}
-            </div>
-          ))}
+          
         </div>
       </div>
     </div>
