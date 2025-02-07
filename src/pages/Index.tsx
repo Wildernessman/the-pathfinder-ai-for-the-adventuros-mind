@@ -1,4 +1,5 @@
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import Sidebar from '@/components/Sidebar';
 import ChatHeader from '@/components/ChatHeader';
@@ -20,6 +21,14 @@ const Index = () => {
   const [selectedModel, setSelectedModel] = useState<ModelProvider>('OpenAI');
   const { toast } = useToast();
 
+  // Load messages from localStorage when component mounts
+  useEffect(() => {
+    const savedMessages = localStorage.getItem('chatMessages');
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
+    }
+  }, []);
+
   const handleSendMessage = async (content: string) => {
     if (!content.trim()) {
       toast({
@@ -39,6 +48,8 @@ const Index = () => {
       ];
       
       setMessages(newMessages);
+      // Save to localStorage after adding user message
+      localStorage.setItem('chatMessages', JSON.stringify(newMessages));
 
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -48,7 +59,10 @@ const Index = () => {
         content: `This is a placeholder response. To use ${selectedModel}, please add your API key in The Map Room.`
       };
 
-      setMessages([...newMessages, assistantMessage]);
+      const updatedMessages = [...newMessages, assistantMessage];
+      setMessages(updatedMessages);
+      // Save to localStorage after adding assistant response
+      localStorage.setItem('chatMessages', JSON.stringify(updatedMessages));
     } catch (error: any) {
       toast({
         title: "Error",
