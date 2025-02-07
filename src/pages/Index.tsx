@@ -7,6 +7,7 @@ import ChatInput from '@/components/ChatInput';
 import ActionButtons from '@/components/ActionButtons';
 import MessageList from '@/components/MessageList';
 import ModelSelector from '@/components/ModelSelector';
+import ProjectSidebar from '@/components/ProjectSidebar';
 import { ModelProvider } from '@/types/models';
 
 type Message = {
@@ -16,6 +17,7 @@ type Message = {
 
 const Index = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isProjectPanelOpen, setIsProjectPanelOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedModel, setSelectedModel] = useState<ModelProvider>('OpenAI');
@@ -100,8 +102,12 @@ const Index = () => {
         onApiKeyChange={() => {}} 
       />
       
-      <main className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
-        <ChatHeader isSidebarOpen={isSidebarOpen} />
+      <main className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'} ${isProjectPanelOpen ? 'mr-64' : 'mr-0'}`}>
+        <ChatHeader 
+          isSidebarOpen={isSidebarOpen}
+          isProjectPanelOpen={isProjectPanelOpen}
+          onProjectPanelToggle={() => setIsProjectPanelOpen(!isProjectPanelOpen)}
+        />
         
         <div className={`flex h-full flex-col ${messages.length === 0 ? 'items-center justify-center' : 'justify-between'} pt-[60px] pb-4`}>
           {messages.length === 0 ? (
@@ -137,6 +143,8 @@ const Index = () => {
           )}
         </div>
       </main>
+
+      <ProjectSidebar isOpen={isProjectPanelOpen} />
     </div>
   );
 };
