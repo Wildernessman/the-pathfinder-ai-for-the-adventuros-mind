@@ -61,7 +61,7 @@ const ProjectSidebar = ({ isOpen }: ProjectSidebarProps) => {
         isOpen ? 'translate-x-0' : 'translate-x-full'
       }`}
       style={{
-        backgroundImage: "url('/lovable-uploads/7d6fca56-e8d8-4d7f-8d4b-af569d985798.png')",
+        backgroundImage: "url('/lovable-uploads/446d6023-efc8-416c-a0a5-b592a7e02798.png')",
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}

@@ -42,7 +42,7 @@ const Sidebar = ({ isOpen, onToggle, onApiKeyChange }: SidebarProps) => {
         isOpen ? "w-64" : "w-0"
       )}
       style={{
-        backgroundImage: "url('/lovable-uploads/8106c028-75cb-488d-a5f0-d88018d3507e.png')",
+        backgroundImage: "url('/lovable-uploads/e3739be7-ce37-4d67-b168-7016c9a2c05a.png')",
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}
