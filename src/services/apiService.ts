@@ -3,7 +3,7 @@ import { ModelProvider } from '@/types/models';
 
 // API endpoints for different providers
 const API_ENDPOINTS: Record<ModelProvider, string> = {
-  Google: 'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent',
+  Google: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
   OpenAI: 'https://api.openai.com/v1/chat/completions',
   Anthropic: 'https://api.anthropic.com/v1/messages',
   Groq: 'https://api.groq.com/openai/v1/chat/completions',
@@ -39,18 +39,13 @@ export const createApiRequest = async (
     case 'Google':
       headers['x-goog-api-key'] = apiKey;
       
-      // Format messages for Gemini
-      const formattedMessages = messages.map(msg => ({
-        role: msg.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: msg.content }]
-      }));
-      
-      // For simplicity, just use the last message when there are multiple
+      // Format the last user message for Gemini
       const lastUserMessage = messages.filter(msg => msg.role === 'user').pop();
       
       body = {
         contents: [
           {
+            role: "user",
             parts: [
               { text: lastUserMessage?.content || '' }
             ]
@@ -102,8 +97,7 @@ export const createApiRequest = async (
     switch (provider) {
       case 'Google':
         responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || 
-                      data.text || 
-                      data.content?.parts?.[0]?.text || 
+                      data.candidates?.[0]?.text || 
                       'No response generated';
         break;
         
