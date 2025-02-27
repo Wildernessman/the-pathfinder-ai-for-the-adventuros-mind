@@ -1,71 +1,68 @@
+
 # Welcome to your GPT Engineer project
 
 ## Project info
 
 **URL**: https://run.gptengineer.app/projects/9d4bcff1-da7e-4e73-bb35-7a988b4bdb7f/improve
 
-## How can I edit this code?
+## Quick Start Guide
 
-There are several ways of editing your application.
+1. **Prerequisites**
+   - Make sure you have Node.js & npm installed
+   - Install Node.js from: https://nodejs.org/
+   - Or install with nvm (recommended): https://github.com/nvm-sh/nvm#installing-and-updating
 
-**Use GPT Engineer**
+2. **Running the Project**
+   ```sh
+   # Step 1: Open your terminal/command prompt
 
-Simply visit the GPT Engineer project at [GPT Engineer](https://gptengineer.app/projects/9d4bcff1-da7e-4e73-bb35-7a988b4bdb7f/improve) and start prompting.
+   # Step 2: Navigate to the project directory
+   cd path/to/your/downloaded/project
 
-Changes made via gptengineer.app will be committed automatically to this repo.
+   # Step 3: Install dependencies
+   npm install
 
-**Use your preferred IDE**
+   # Step 4: Start the development server
+   npm run dev
+   ```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in the GPT Engineer UI.
+3. **View the Project**
+   - Once the server starts, open your browser
+   - Visit: http://localhost:5173
+   - You should see your application running!
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Project Structure
 
-Follow these steps:
+This project is built with:
+- Vite (for fast development)
+- TypeScript (for type safety)
+- React (UI framework)
+- shadcn-ui (component library)
+- Tailwind CSS (styling)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Deployment Options
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. **Via GPT Engineer**
+   - Visit [GPT Engineer](https://gptengineer.app/projects/9d4bcff1-da7e-4e73-bb35-7a988b4bdb7f/improve)
+   - Click Share -> Publish
 
-# Step 3: Install the necessary dependencies.
-npm i
+2. **Custom Domain**
+   - For custom domains, we recommend using Netlify
+   - Visit our docs for details: [Custom domains](https://docs.gptengineer.app/tips-tricks/custom-domain/)
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## Need Help?
 
-**Edit a file directly in GitHub**
+If you're having trouble:
+1. Check if Node.js and npm are installed: `node -v` and `npm -v`
+2. Make sure you're in the correct directory when running commands
+3. Try deleting the `node_modules` folder and running `npm install` again
+4. Check the console for any error messages
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Common Issues
 
-**Use GitHub Codespaces**
+- **'npm' is not recognized**: Install Node.js from https://nodejs.org/
+- **Port already in use**: Try using a different port with `npm run dev -- --port 3000`
+- **Module not found errors**: Run `npm install` again
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+For more help, visit our documentation at https://docs.gptengineer.app/
 
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-All GPT Engineer projects can be deployed directly via the GPT Engineer app.
-
-Simply visit your project at [GPT Engineer](https://gptengineer.app/projects/9d4bcff1-da7e-4e73-bb35-7a988b4bdb7f/improve) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.gptengineer.app/tips-tricks/custom-domain/)
