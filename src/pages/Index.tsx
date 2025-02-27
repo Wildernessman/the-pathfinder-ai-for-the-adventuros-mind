@@ -9,6 +9,7 @@ import MessageList from '@/components/MessageList';
 import ModelSelector from '@/components/ModelSelector';
 import ProjectSidebar from '@/components/ProjectSidebar';
 import { ModelProvider } from '@/types/models';
+import { createApiRequest } from '@/services/apiService';
 
 type Message = {
   role: 'user' | 'assistant';
@@ -20,7 +21,8 @@ const Index = () => {
   const [isProjectPanelOpen, setIsProjectPanelOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<ModelProvider>('OpenAI');
+  const [selectedModel, setSelectedModel] = useState<ModelProvider>('Google');
+  const [apiKey, setApiKey] = useState<string>('');
   const { toast } = useToast();
 
   // Load messages from localStorage when component mounts
@@ -39,12 +41,22 @@ const Index = () => {
           setMessages(parsedMessages);
         }
       }
+      
+      // Load API key from localStorage
+      const savedApiKey = localStorage.getItem("apiKey");
+      if (savedApiKey) {
+        setApiKey(savedApiKey);
+      }
     } catch (error) {
-      console.error('Error loading messages:', error);
+      console.error('Error loading messages or API key:', error);
       // Clear potentially corrupted data
       localStorage.removeItem('chatMessages');
     }
   }, []);
+
+  const handleApiKeyChange = (newApiKey: string) => {
+    setApiKey(newApiKey);
+  };
 
   const handleSendMessage = async (content: string) => {
     if (!content?.trim()) {
@@ -70,18 +82,62 @@ const Index = () => {
       // Save to localStorage after adding user message
       localStorage.setItem('chatMessages', JSON.stringify(newMessages));
 
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Check if API key exists
+      if (!apiKey) {
+        toast({
+          title: "Missing API Key",
+          description: `Please add your ${selectedModel} API key in the sidebar.`,
+          variant: "destructive"
+        });
+        
+        const assistantMessage: Message = {
+          role: 'assistant',
+          content: `Please add your ${selectedModel} API key in the sidebar to use this feature.`
+        };
+        
+        const updatedMessages = [...newMessages, assistantMessage];
+        setMessages(updatedMessages);
+        localStorage.setItem('chatMessages', JSON.stringify(updatedMessages));
+        return;
+      }
 
-      const assistantMessage: Message = {
-        role: 'assistant',
-        content: `This is a placeholder response. To use ${selectedModel || 'OpenAI'}, please add your API key in The Map Room.`
-      };
+      try {
+        // Send the request to the API
+        const responseText = await createApiRequest(
+          selectedModel,
+          newMessages,
+          apiKey
+        );
+        
+        const assistantMessage: Message = {
+          role: 'assistant',
+          content: responseText
+        };
 
-      const updatedMessages = [...newMessages, assistantMessage];
-      setMessages(updatedMessages);
-      // Save to localStorage after adding assistant response
-      localStorage.setItem('chatMessages', JSON.stringify(updatedMessages));
+        const updatedMessages = [...newMessages, assistantMessage];
+        setMessages(updatedMessages);
+        // Save to localStorage after adding assistant response
+        localStorage.setItem('chatMessages', JSON.stringify(updatedMessages));
+      } catch (error) {
+        console.error('API request failed:', error);
+        
+        // Display error in chat
+        const errorMessage = error instanceof Error ? error.message : "An error occurred";
+        const assistantMessage: Message = {
+          role: 'assistant',
+          content: `Error: ${errorMessage}`
+        };
+        
+        const updatedMessages = [...newMessages, assistantMessage];
+        setMessages(updatedMessages);
+        localStorage.setItem('chatMessages', JSON.stringify(updatedMessages));
+        
+        toast({
+          title: "API Error",
+          description: errorMessage,
+          variant: "destructive"
+        });
+      }
     } catch (error) {
       console.error('Error sending message:', error);
       toast({
@@ -99,7 +155,7 @@ const Index = () => {
       <Sidebar 
         isOpen={isSidebarOpen} 
         onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
-        onApiKeyChange={() => {}} 
+        onApiKeyChange={handleApiKeyChange} 
       />
       
       <main className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'} ${isProjectPanelOpen ? 'mr-64' : 'mr-0'}`}>
