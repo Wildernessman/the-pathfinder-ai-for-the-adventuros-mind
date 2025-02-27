@@ -3,7 +3,7 @@ import { ModelProvider } from '@/types/models';
 
 // API endpoints for different providers
 const API_ENDPOINTS: Record<ModelProvider, string> = {
-  Google: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent',
+  Google: 'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent',
   OpenAI: 'https://api.openai.com/v1/chat/completions',
   Anthropic: 'https://api.anthropic.com/v1/messages',
   Groq: 'https://api.groq.com/openai/v1/chat/completions',
@@ -45,8 +45,17 @@ export const createApiRequest = async (
         parts: [{ text: msg.content }]
       }));
       
+      // For simplicity, just use the last message when there are multiple
+      const lastUserMessage = messages.filter(msg => msg.role === 'user').pop();
+      
       body = {
-        contents: formattedMessages,
+        contents: [
+          {
+            parts: [
+              { text: lastUserMessage?.content || '' }
+            ]
+          }
+        ],
         generationConfig: {
           temperature: 0.7,
           maxOutputTokens: 2048,
@@ -70,6 +79,9 @@ export const createApiRequest = async (
   }
 
   try {
+    console.log('Sending request to:', endpoint);
+    console.log('Request body:', JSON.stringify(body));
+    
     const response = await fetch(endpoint, {
       method: 'POST',
       headers,
@@ -82,13 +94,17 @@ export const createApiRequest = async (
     }
 
     const data = await response.json();
+    console.log('Response data:', data);
     
     // Extract the response text based on the provider
     let responseText = '';
     
     switch (provider) {
       case 'Google':
-        responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated';
+        responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || 
+                      data.text || 
+                      data.content?.parts?.[0]?.text || 
+                      'No response generated';
         break;
         
       case 'OpenAI':
